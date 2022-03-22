@@ -1,10 +1,9 @@
 class Facility < ApplicationRecord
-  self.table_name = :mgmtFacilities
-  self.inheritance_column = :_type
+  self.table_name = :peeringdb_facility
+  default_scope { where(status: :ok) }
 
-  has_many :public_facilities
-  has_many :publics, through: :public_facilities
+  belongs_to :organization, foreign_key: :org_id
 
-  has_many :participant_privates
-  has_many :participants, through: :participant_privates
+  has_many :network_facilities
+  has_many :networks, through: :network_facilities
 end
