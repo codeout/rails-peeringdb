@@ -1,11 +1,11 @@
 require 'json'
 
-ixs = Hash[Public.includes(:participants).where(country: 'JP').group_by(&:city).map { |c, publics|
-  [c, publics.map(&:participants).flatten.uniq]
+ixs = Hash[Ixlan.joins(:ix).includes(:networks).where(ix: { country: 'JP' }).group_by { |i| i.ix.city }.map { |c, ixlans|
+  [c, ixlans.map(&:networks).flatten.uniq]
 }]
 
-privates = Hash[Facility.includes(:participants).where(country: 'JP').group_by(&:city).map { |c, facilities|
-  [c, facilities.map(&:participants).flatten.uniq]
+privates = Hash[Facility.includes(:networks).where(country: 'JP').group_by(&:city).map { |c, facilities|
+  [c, facilities.map(&:networks).flatten.uniq]
 }]
 
 cities = (ixs.keys + privates.keys).uniq
